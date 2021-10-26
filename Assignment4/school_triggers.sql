@@ -82,5 +82,41 @@ $subject_mean$ LANGUAGE plpgsql;
 
 CREATE TRIGGER subject_mean 
 AFTER DELETE OR INSERT OR UPDATE ON matricula
-FOR EACH ROW EXECUTE PROCEDURE update_subject_mean(); 
+FOR EACH ROW EXECUTE PROCEDURE update_subject_mean();
+
+--4
+CREATE OR REPLACE FUNCTION derived_age() RETURNS TRIGGER AS $update_student_age$
+DECLARE
+	student_age integer;
+BEGIN
+	SELECT date_part('year', age(new.DATANASC)) FROM ALUNO INTO new.idade;
+	
+	return NEW;
+END;
+$update_student_age$ LANGUAGE plpgsql;
+
+CREATE TRIGGER devive_student_age
+BEFORE UPDATE ON aluno
+FOR EACH ROW EXECUTE PROCEDURE derived_age();
+
+--7
+CREATE OR REPLACE FUNCTION matricula_reports() RETURNS TRIGGER AS $matricula_reports$
+DECLARE
+	CNT INTEGER;
+BEGIN
+	SELECT COUNT(*) FROM MATRICULA INTO CNT;
+	raise notice 'Operacao de %: % registros', TG_OP, CNT;
+	return null;
+END;
+$matricula_reports$ LANGUAGE plpgsql;
+
+CREATE TRIGGER report_matricula_BEFORE
+BEFORE UPDATE OR INSERT OR DELETE ON MATRICULA
+EXECUTE PROCEDURE matricula_reports();
+
+CREATE TRIGGER report_matricula_
+AFTER UPDATE OR INSERT OR DELETE ON MATRICULA
+EXECUTE PROCEDURE matricula_reports();
+
+
 	
