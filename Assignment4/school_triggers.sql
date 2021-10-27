@@ -99,6 +99,44 @@ CREATE TRIGGER devive_student_age
 BEFORE UPDATE ON aluno
 FOR EACH ROW EXECUTE PROCEDURE derived_age();
 
+--5
+CREATE OR REPLACE FUNCTION check_terceirizado_fc() RETURNS trigger AS
+$check_terceirizado_fc$
+BEGIN
+	PERFORM * FROM l11_terceirizado WHERE TCPF = NEW.PECPF;
+	IF FOUND THEN
+		RAISE EXCEPTION 'Este funcionário já se encontra na tabela de terceirizados, e não deve ser inserido na tabela de permanentes';
+	END IF;
+	RETURN NEW;
+END;
+$check_terceirizado_fc$ LANGUAGE plpgsql;
+
+CREATE TRIGGER check_terceirizado
+BEFORE UPDATE OR INSERT ON l10_permanente
+FOR EACH ROW EXECUTE PROCEDURE check_terceirizado_fc();
+
+--6
+CREATE OR REPLACE FUNCTION check_sala_cinema() RETURNS trigger AS
+$check_sala_cinema$
+BEGIN
+
+	IF NEW.cinema_onde_ocorre = NEW.id_cinema THEN
+		PERFORM * FROM sala WHERE nr_sala = NEW.nr_sala AND id_cinema = NEW.id_cinema;
+		IF NOT FOUND THEN
+			RAISE EXCEPTION 'Esta sessão deve ocorrer apenas em uma sala que pertença ao seu cinema';
+		END IF
+	ELSE
+		RAISE EXCEPTION 'Sala e local de sessão nao correspondem ';
+	END IF;
+	
+	RETURN NEW;
+END
+$check_sala_cinema$
+
+CREATE TRIGGER check_sala_cinema
+BEFORE UPDATE OR INSERT ON sessao
+FOR EACH ROW EXECUTE PROCEDURE check_sala_cinema();
+
 --7
 CREATE OR REPLACE FUNCTION matricula_reports() RETURNS TRIGGER AS $matricula_reports$
 DECLARE
@@ -117,6 +155,15 @@ EXECUTE PROCEDURE matricula_reports();
 CREATE TRIGGER report_matricula_
 AFTER UPDATE OR INSERT OR DELETE ON MATRICULA
 EXECUTE PROCEDURE matricula_reports();
+
+--10
+CREATE OR REPLACE FUNCTION aluno_idade_atualiza() RETURNS void AS 
+$aluno_idade_atualiza$
+BEGIN
+UPDATE Aluno SET Idade = FLOOR((current_date - datanasc)/365.25);
+END;
+$aluno_idade_atualiza$ LANGUAGE plpgsql;
+select aluno_idade_atualiza()
 
 
 	
