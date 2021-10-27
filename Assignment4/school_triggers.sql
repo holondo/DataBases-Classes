@@ -1,8 +1,8 @@
 --1
 CREATE OR REPLACE FUNCTION student_capacity() RETURNS TRIGGER AS $student_capacity$
 DECLARE
-	total_credits integer;
-	discipline_credits integer;
+	total_credits integer default 0;
+	discipline_credits integer default 0;
 BEGIN
 	SELECT DISCIPLINA.ncred from disciplina into discipline_credits where disciplina.sigla = new.sigla;
 	
@@ -143,8 +143,14 @@ DECLARE
 	CNT INTEGER;
 BEGIN
 	SELECT COUNT(*) FROM MATRICULA INTO CNT;
+	
+	if(TG_OP = 'DELETE') then
+		raise notice 'Operacao de %: % registros', TG_OP, CNT;
+		return OLD;
+	END IF;
+	
 	raise notice 'Operacao de %: % registros', TG_OP, CNT;
-	return null;
+	return NEW;
 END;
 $matricula_reports$ LANGUAGE plpgsql;
 
@@ -152,18 +158,31 @@ CREATE TRIGGER report_matricula_BEFORE
 BEFORE UPDATE OR INSERT OR DELETE ON MATRICULA
 EXECUTE PROCEDURE matricula_reports();
 
-CREATE TRIGGER report_matricula_
+CREATE TRIGGER report_matricula_AFTER
 AFTER UPDATE OR INSERT OR DELETE ON MATRICULA
 EXECUTE PROCEDURE matricula_reports();
 
---10
-CREATE OR REPLACE FUNCTION aluno_idade_atualiza() RETURNS void AS 
-$aluno_idade_atualiza$
+--8
+ALTER TABLE Matricula
+ADD aprovacao boolean DEFAULT false;
+--
+CREATE OR REPLACE FUNCTION matricula_aproval() RETURNS TRIGGER AS $matricula_aproval$
 BEGIN
-UPDATE Aluno SET Idade = FLOOR((current_date - datanasc)/365.25);
+  NEW.aprovacao = (NEW.Nota>=5);
+  Return NEW;
+END;
+$matricula_aproval$ LANGUAGE plpgsql;
+--9
+CREATE TRIGGER matricula_aproval
+BEFORE INSERT OR UPDATE ON matricula
+FOR EACH ROW EXECUTE PROCEDURE matricula_aproval();
+
+--10
+
+CREATE OR REPLACE FUNCTION aluno_idade_atualiza() RETURNS void AS $aluno_idade_atualiza$
+BEGIN
+	UPDATE Aluno SET Idade = date_part('year', age(aluno.DATANASC));
 END;
 $aluno_idade_atualiza$ LANGUAGE plpgsql;
 select aluno_idade_atualiza()
 
-
-	
