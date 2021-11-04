@@ -53,3 +53,22 @@ NATURAL LEFT JOIN fornecedores order by p_nome, f_nome;
 select f_nome, p_id
 from fornecedores, catalogo
 where fornecedores.f_id = CATALOGo.f_id;
+--i
+
+--j
+select count(distinct c.p_id) from catalogo c
+join fornecedores f on f.f_id = c.f_id
+join pecas p on p.p_id = c.p_id
+where f.f_nome = 'Joao';
+
+--k
+select max(c.preco), min(c.preco), round(avg(c.preco),2) from catalogo c
+join fornecedores f on f.f_id = c.f_id
+join pecas p on p.p_id = c.p_id
+where p.cor = 'verde';
+
+--l
+select f.f_nome, count(*) from catalogo c
+join fornecedores f on f.f_id = c.f_id
+join pecas p on p.p_id = c.p_id
+group by f_nome;
