@@ -73,10 +73,15 @@ NATURAL LEFT JOIN fornecedores order by p_nome, f_nome;
 --T3 <- PECAS * (FORNECEDOR * CATALOGO)
 --T4 <- PI(f_id)((T3  T1) UNION (T3 / T2))
 
+--h 
+--T1 <- pecas natural-right-join (fonecedores natural-left-join catalogo)
+--T2 <- PI(f_nome, f_id, p_nome, preco)
+
 --i
 select p_id, count(f_id) from catalogo
 group by p_id
 having count(f_id) > 1;
+
 --j
 select count(distinct c.p_id) from catalogo c
 join fornecedores f on f.f_id = c.f_id
