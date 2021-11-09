@@ -99,3 +99,20 @@ select f.f_nome, count(*) from catalogo c
 join fornecedores f on f.f_id = c.f_id
 join pecas p on p.p_id = c.p_id
 group by f_nome;
+
+--Descreva o resultado das seguintes consultas:
+--a
+--A consulta resulta em uma coluna de tuplas com o nome dos fornecedores que vendem peças vermelhas com preço menor que 100. O nome pode se repetir, mas referem-se a pessoas diferentes (!=f_id).
+
+--b
+--A consulta resulta em um conjunto vazio, uma vez que é feita uma projeção da coluna f_nome logo após da projeção de uma coluna diferente f_id.
+
+--c
+--A consulta resulta em uma lista de nomes de fornecedores que vendem ao mesmo tempo, peças vermelhas e verdes, ambas com preço inferior a 100. 
+--Todavia, neste caso a consulta não respeita o f_id, assim fornecedores diferentes, com mesmo nome, são considerados equivalentes, podendo comprometer a consulta. 
+
+--d
+--A consulta resulta em uma lista de IDs de fornecedores (f_id) que vendem ao mesmo tempo, peças vermelhas e verdes, ambas com preço inferior a 100.
+
+--e
+--A consulta resulta em uma lista de nomes de fornecedores (f_nome), os quais estão atrelados a um id unico, oculto a consulta, e que vendem ao mesmo tempo peças vermelhas e verdes, ambas com preço inferior a 100.
