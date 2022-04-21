@@ -2,19 +2,56 @@ CREATE TABLE AIRPORTS(
 	Id INTEGER NOT NULL,
 	Ident VARCHAR(4) NOT NULL,
 	Type VARCHAR(20) NOT NULL,
-	Name VARCHAR(50),
-	LatDeg,
-	LongDeg,
-	ElevFt,
-	Continent,
-	ISOCountry,
-	ISORegion,
-	City,
-	Scheduled_service,
-	GPSCode,
-	IATACode,
-	LocalCode,
-	HomeLink,
-	WikipediaLink,
-	Keyword
-)
+	Name VARCHAR(50) NOT NULL,
+	LatDeg FLOAT NOT NULL,
+	LongDeg FLOAT NOT NULL,
+	ElevFt INTEGER,
+	Continent VARCHAR(2),
+	ISOCountry VARCHAR(2),
+	ISORegion VARCHAR(5),
+	City VARCHAR(50),
+	Scheduled_service VARCHAR(3),
+	GPSCode VARCHAR(5),
+	IATACode VARCHAR(10),
+	LocalCode VARCHAR(5),
+	HomeLink VARCHAR(200),
+	WikipediaLink VARCHAR(2083),
+	Keyword VARCHAR(100),
+	
+	CONSTRAINT pk_airport PRIMARY KEY(Id)
+);
+
+CREATE TABLE COUNTRIES(
+	Id INTEGER NOT NULL,
+	Code VARCHAR(2) NOT NULL,
+	Name VARCHAR(50) NOT NULL,
+	Continent VARCHAR(2) NOT NULL,
+	WikipediaLink VARCHAR(2083),
+	Keywords VARCHAR(200),
+	
+	CONSTRAINT pk_countries PRIMARY KEY(Id)
+);
+
+CREATE TABLE GEOCITIES15K(
+	GeonameID INTEGER NOT NULL,
+	Name VARCHAR(50) NOT NULL,
+	AsciiName VARCHAR(50) NOT NULL,
+	AlternateNames VARCHAR(1000),
+	Lat FLOAT NOT NULL,
+	Long FLOAT NOT NULL,
+	FeatureClass VARCHAR(2) NOT NULL, --talvez varchar 1
+	FeatureCode VARCHAR(5) NOT NULL,
+	Country VARCHAR(2) NOT NULL,
+	CC2 VARCHAR(2),
+	Admin1Code INTEGER,
+	Admin2Code INTEGER,
+	Admin3Code INTEGER,
+	Admin4Code INTEGER,
+	Population INTEGER NOT NULL,
+	Elevation INTEGER,
+	Dem INTEGER,
+	TimeZone VARCHAR(50) NOT NULL,
+	Modification DATE,
+	
+	CONSTRAINT pk_geocities PRIMARY KEY(GeonameID)
+);
