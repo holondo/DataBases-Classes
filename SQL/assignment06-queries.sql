@@ -21,7 +21,7 @@ where p.cor = 'vermelho' or f.endereco = 'Sao Carlos';
 
 --T1 <- pecas * catalogo
 --T2 <-- fornecedores * T1
---T3 <- sigma(cor == vermelho or endereco == Sao Carlos)
+--T3 <- sigma(cor == vermelho or endereco == Sao Carlos)(T2)
 --T4 <- pi(f_nome)T3
 
 --c
@@ -47,8 +47,8 @@ from fornecedores f1 join catalogo c1 on c1.f_id = f1.f_id, --join comes before 
 	fornecedores f2 join catalogo c2 on c2.f_id = f2.f_id
 where f1.f_id <> f2.f_id and c1.p_id = c2.p_id and c1.preco < c2.preco;
 
---T1 <- aliasF1(f_id, f_nome, endereco)(fornecedores) * aliasC1(f_id, p_id, preco)
---T2 <- aliasF2(f_id, f_nome, endereco)(fornecedores) * aliasC2(f_id, p_id, preco)
+--T1 <- aliasF1(f_id, f_nome, endereco)(fornecedores) * aliasC1(f_id, p_id, preco)(catalogo)
+--T2 <- aliasF2(f_id, f_nome, endereco)(fornecedores) * aliasC2(f_id, p_id, preco)(catalogo)
 --T3 <- T1 theta-join(f1.f_id <> f2.f_id and c1.p_id = c2.p_id and c1.preco < c2.preco) T2
 --T4 <- PI(f1.f_id, c1.preco, f2.f_id, c2.preco, c2.p_id, c1.p_id)T3
 
@@ -71,11 +71,11 @@ NATURAL LEFT JOIN fornecedores order by p_nome, f_nome;
 --T1 <- sigma(cor = vermelho)(pecas)
 --T2 <- sigma(cor = verde)(pecas)
 --T3 <- PECAS * (FORNECEDOR * CATALOGO)
---T4 <- PI(f_id)((T3  T1) UNION (T3 / T2))
+--T4 <- PI(f_id)((T3 / T1) UNION (T3 / T2))
 
 --h 
 --T1 <- pecas natural-right-join (fonecedores natural-left-join catalogo)
---T2 <- PI(f_nome, f_id, p_nome, preco)
+--T2 <- PI(f_nome, f_id, p_nome, preco)(T1)
 
 --i
 select p_id, count(f_id) from catalogo

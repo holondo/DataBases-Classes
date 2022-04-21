@@ -1,0 +1,20 @@
+CREATE TABLE AIRPORTS(
+	Id INTEGER NOT NULL,
+	Ident VARCHAR(4) NOT NULL,
+	Type VARCHAR(20) NOT NULL,
+	Name VARCHAR(50),
+	LatDeg,
+	LongDeg,
+	ElevFt,
+	Continent,
+	ISOCountry,
+	ISORegion,
+	City,
+	Scheduled_service,
+	GPSCode,
+	IATACode,
+	LocalCode,
+	HomeLink,
+	WikipediaLink,
+	Keyword
+)
