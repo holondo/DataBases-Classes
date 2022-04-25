@@ -107,3 +107,101 @@ CREATE TABLE Driver(
 
 	CONSTRAINT pk_driver PRIMARY KEY(DriverId)
 );
+
+CREATE TABLE Races(
+	RaceId INTEGER,
+	Year VARCHAR(4),
+	Round INTEGER,
+	CircuitId INTEGER,
+	Name VARCHAR(100),
+	Date DATE,
+	Time TIME,
+	URL VARCHAR(2048),
+
+	CONSTRAINT pk_races PRIMARY KEY(RaceId),
+	CONSTRAINT fk_race_year FOREIGN KEY(Year) REFERENCES Seasons(Year)
+);
+
+CREATE TABLE Laptimes(
+	RaceId INTEGER,
+	DriverId INTEGER,
+	Lap INTEGER,
+	Position INTEGER,
+	Time TIME,
+	Milliseconds INTEGER,
+
+	CONSTRAINT pk_laptime PRIMARY KEY(RaceId, DriverId, Lap),
+	CONSTRAINT fk_laptime_race FOREIGN KEY(RaceId) REFERENCES Races(RaceId)
+);
+
+CREATE TABLE Pitstops(
+	RaceId INTEGER,
+	DriverId INTEGER,
+	Stop INTEGER,
+	Lap INTEGER,
+	Time TIME,
+	Duration FLOAT,
+	Milliseconds INTEGER,
+
+	CONSTRAINT pk_pitstops PRIMARY KEY(RaceId, DriverId, Stop),
+	CONSTRAINT fk_pitstops_race FOREIGN KEY(RaceId) REFERENCES Races(RaceId),
+	CONSTRAINT fk_pitstops_driver FOREIGN KEY(DriverId) REFERENCES Driver(DriverId)
+);
+
+CREATE TABLE Qualifying(
+	QualifyId INTEGER,
+	RaceId INTEGER,
+	DriverId INTEGER,
+	ConstructorId INTEGER,
+	Number INTEGER,
+	Position INTEGER,
+	Q1 VARCHAR(10) NOT NULL,
+	Q2 VARCHAR(10) DEFAULT "\N",
+	Q3 VARCHAR(10) DEFAULT "\N",
+
+	CONSTRAINT pk_qualifying PRIMARY KEY(QualifyId),
+	CONSTRAINT fk_qualifying_race FOREIGN KEY(RaceId) REFERENCES Races(RaceId),
+	CONSTRAINT fk_qualifying_driver FOREIGN KEY(DriverId) REFERENCES Driver(DriverId),
+	CONSTRAINT fk_qualifying_constructor FOREIGN KEY(ConstructorId) REFERENCES Constructors(ConstructorId)
+);
+
+CREATE TABLE DriverStandings(
+	DriverStandingsId INTEGER,
+	RaceID INTEGER,
+	DriverId INTEGER,
+	Points INTEGER,
+	Position INTEGER,
+	PositionText INTEGER,
+	Win BOOLEAN DEFAULT FALSE,
+
+	CONSTRAINT pk_driverstandings PRIMARY KEY(DriverStandingsId),
+	CONSTRAINT fk_driverstandings_race FOREIGN KEY(RaceId) REFERENCES Races(RaceId),
+	CONSTRAINT fk_driverstandings_driver FOREIGN KEY(DriverId) REFERENCES Driver(DriverId)
+);
+
+CREATE TABLE Results(
+	ResultId INTEGER,
+	RaceId INTEGER,
+	DriverId INTEGER,
+	ConstructorId INTEGER,
+	Number INTEGER,
+	Grid INTEGER,
+	Position VARCHAR(3) DEFAULT "\N",
+	PositionText VARCHAR(3) DEFAULT "R",
+	PositionOrder INTEGER,
+	Points INTEGER,
+	Laps INTEGER,
+ 	Time VARCHAR(10) DEFAULT "\N",
+ 	Milliseconds VARCHAR(8) DEFAULT "\N",
+ 	FastestLap VARCHAR(3) DEFAULT "\N",
+ 	Rank VARCHAR(3) DEFAULT "\N",
+ 	FastestLapTime VARCHAR(10) DEFAULT "\N",
+ 	FastestLapSpeed VARCHAR(10) DEFAULT "\N",
+ 	StatusID INTEGER,
+
+	CONSTRAINT pk_results PRIMARY KEY(ResultId),
+	CONSTRAINT fk_results_race FOREIGN KEY(RaceId) REFERENCES Races(RaceId),
+	CONSTRAINT fk_results_driver FOREIGN KEY(DriverId) REFERENCES Driver(DriverId),
+	CONSTRAINT fk_results_constructor FOREIGN KEY(ConstructorId) REFERENCES Constructors(ConstructorId)
+	CONSTRAINT fk_results_status FOREIGN KEY(StatusId) REFERENCES Status(StatusId)
+);
