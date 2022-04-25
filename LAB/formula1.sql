@@ -55,3 +55,55 @@ CREATE TABLE GEOCITIES15K(
 	
 	CONSTRAINT pk_geocities PRIMARY KEY(GeonameID)
 );
+
+CREATE TABLE Status(
+	StatusId INTEGER,
+	Status VARCHAR(50),
+
+	CONSTRAINT pk_status PRIMARY KEY(StatusId)
+);
+
+CREATE TABLE Seasons(
+	Year VARCHAR(4),
+	URL VARCHAR(2048),
+
+	CONSTRAINT pk_seasons PRIMARY KEY(Year)
+);
+
+CREATE TABLE Circuits(
+	CircuitID INTEGER,
+	CircuitRef VARCHAR(100),
+	Name VARCHAR(100),
+	Location VARCHAR(100),
+	Country VARCHAR(100),
+	Lat FLOAT,
+	Lng FLOAT,
+	Alt INTEGER,
+	URL VARCHAR(2048),
+
+	CONSTRAINT pk_circuits PRIMARY KEY(CircuitID)
+);
+
+CREATE TABLE Constructors(
+	ConstructorID INTEGER,
+	ConstructorRef VARCHAR(50),
+	Name VARCHAR(50),
+	Nationality VARCHAR(50),
+	URL VARCHAR(2048),
+
+	CONSTRAINT pk_constructors PRIMARY KEY(ConstructorID)
+);
+
+CREATE TABLE Driver(
+	DriverId INTEGER,
+	DriverRef VARCHAR(50),
+	Number VARCHAR(5) DEFAULT "\N",
+	Code VARCHAR(3) DEFAULT "\N",
+	Forename VARCHAR(50),
+	Surname VARCHAR(50),
+	DateOfBirth DATE,
+	Nationality VARCHAR(50),
+	URL VARCHAR(2048)
+
+	CONSTRAINT pk_driver PRIMARY KEY(DriverId)
+);
