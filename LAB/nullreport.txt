@@ -1,0 +1,264 @@
+##############################
+
+airports.csv
+
+id	Null:False
+
+ident	Null:False
+
+type	Null:False
+
+name	Null:False
+
+latitude_deg	Null:False
+
+longitude_deg	Null:False
+
+elevation_ft	Null:True
+
+continent	Null:True
+
+iso_country	Null:True
+
+iso_region	Null:False
+
+municipality	Null:True
+
+scheduled_service	Null:False
+
+gps_code	Null:True
+
+iata_code	Null:True
+
+local_code	Null:True
+
+home_link	Null:True
+
+wikipedia_link	Null:True
+
+keywords	Null:True
+
+##############################
+
+circuits.csv
+
+circuitId	Null:False
+
+circuitRef	Null:False
+
+name	Null:False
+
+location	Null:False
+
+country	Null:False
+
+lat	Null:False
+
+lng	Null:False
+
+alt	Null:False
+
+url	Null:False
+
+##############################
+
+constructors.csv
+
+constructorId	Null:False
+
+constructorRef	Null:False
+
+name	Null:False
+
+nationality	Null:False
+
+url	Null:False
+
+##############################
+
+countries.csv
+
+id	Null:False
+
+code	Null:True
+
+name	Null:False
+
+continent	Null:True
+
+wikipedia_link	Null:False
+
+keywords	Null:True
+
+##############################
+
+drivers.csv
+
+driverId	Null:False
+
+driverRef	Null:False
+
+number	Null:False
+
+code	Null:False
+
+forename	Null:False
+
+surname	Null:False
+
+dob	Null:False
+
+nationality	Null:False
+
+url	Null:False
+
+##############################
+
+driverStandings.csv
+
+driverStandingsId	Null:False
+
+raceId	Null:False
+
+driverId	Null:False
+
+points	Null:False
+
+position	Null:False
+
+positionText	Null:False
+
+wins	Null:False
+
+##############################
+
+lapTimes.csv
+
+raceId	Null:False
+
+driverId	Null:False
+
+lap	Null:False
+
+position	Null:False
+
+time	Null:False
+
+milliseconds	Null:False
+
+##############################
+
+pitStops.csv
+
+raceId	Null:False
+
+driverId	Null:False
+
+stop	Null:False
+
+lap	Null:False
+
+time	Null:False
+
+duration	Null:False
+
+milliseconds	Null:False
+
+##############################
+
+qualifying.csv
+
+qualifyId	Null:False
+
+raceId	Null:False
+
+driverId	Null:False
+
+constructorId	Null:False
+
+number	Null:False
+
+position	Null:False
+
+q1	Null:True
+
+q2	Null:True
+
+q3	Null:True
+
+##############################
+
+races.csv
+
+raceId	Null:False
+
+year	Null:False
+
+round	Null:False
+
+circuitId	Null:False
+
+name	Null:False
+
+date	Null:False
+
+time	Null:False
+
+url	Null:False
+
+##############################
+
+results.csv
+
+resultId	Null:False
+
+raceId	Null:False
+
+driverId	Null:False
+
+constructorId	Null:False
+
+number	Null:False
+
+grid	Null:False
+
+position	Null:False
+
+positionText	Null:False
+
+positionOrder	Null:False
+
+points	Null:False
+
+laps	Null:False
+
+time	Null:False
+
+milliseconds	Null:False
+
+fastestLap	Null:False
+
+rank	Null:False
+
+fastestLapTime	Null:False
+
+fastestLapSpeed	Null:False
+
+statusId	Null:False
+
+##############################
+
+seasons.csv
+
+year	Null:False
+
+url	Null:False
+
+##############################
+
+status.csv
+
+statusId	Null:False
+
+status	Null:False
+

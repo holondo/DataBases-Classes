@@ -10,7 +10,7 @@ CREATE TABLE AIRPORTS(
 	ISOCountry VARCHAR(2),
 	ISORegion VARCHAR(5),
 	City VARCHAR(50),
-	Scheduled_service VARCHAR(3),
+	Scheduled_service VARCHAR(3) NOT NULL,
 	GPSCode VARCHAR(5),
 	IATACode VARCHAR(10),
 	LocalCode VARCHAR(5),
@@ -23,9 +23,9 @@ CREATE TABLE AIRPORTS(
 
 CREATE TABLE COUNTRIES(
 	Id INTEGER NOT NULL,
-	Code VARCHAR(2) NOT NULL,
+	Code VARCHAR(2),
 	Name VARCHAR(50) NOT NULL,
-	Continent VARCHAR(2) NOT NULL,
+	Continent VARCHAR(2),
 	WikipediaLink VARCHAR(2083),
 	Keywords VARCHAR(200),
 	
@@ -57,91 +57,91 @@ CREATE TABLE GEOCITIES15K(
 );
 
 CREATE TABLE Status(
-	StatusId INTEGER,
-	Status VARCHAR(50),
+	StatusId INTEGER NOT NULL,
+	Status VARCHAR(50) NOT NULL,
 
 	CONSTRAINT pk_status PRIMARY KEY(StatusId)
 );
 
 CREATE TABLE Seasons(
-	Year VARCHAR(4),
+	Year VARCHAR(4) NOT NULL,
 	URL VARCHAR(2048),
 
 	CONSTRAINT pk_seasons PRIMARY KEY(Year)
 );
 
 CREATE TABLE Circuits(
-	CircuitID INTEGER,
-	CircuitRef VARCHAR(100),
-	Name VARCHAR(100),
-	Location VARCHAR(100),
-	Country VARCHAR(100),
-	Lat FLOAT,
-	Lng FLOAT,
-	Alt INTEGER,
-	URL VARCHAR(2048),
+	CircuitID INTEGER NOT NULL,
+	CircuitRef VARCHAR(100) NOT NULL,
+	Name VARCHAR(100) NOT NULL,
+	Location VARCHAR(100) NOT NULL,
+	Country VARCHAR(100) NOT NULL,
+	Lat FLOAT NOT NULL,
+	Lng FLOAT NOT NULL,
+	Alt INTEGER NOT NULL,
+	URL VARCHAR(2048) NOT NULL,
 
 	CONSTRAINT pk_circuits PRIMARY KEY(CircuitID)
 );
 
 CREATE TABLE Constructors(
-	ConstructorID INTEGER,
-	ConstructorRef VARCHAR(50),
-	Name VARCHAR(50),
-	Nationality VARCHAR(50),
-	URL VARCHAR(2048),
+	ConstructorID INTEGER NOT NULL,
+	ConstructorRef VARCHAR(50) NOT NULL,
+	Name VARCHAR(50) NOT NULL,
+	Nationality VARCHAR(50) NOT NULL,
+	URL VARCHAR(2048) NOT NULL,
 
 	CONSTRAINT pk_constructors PRIMARY KEY(ConstructorID)
 );
 
 CREATE TABLE Driver(
-	DriverId INTEGER,
-	DriverRef VARCHAR(50),
-	Number VARCHAR(5) DEFAULT "\N",
-	Code VARCHAR(3) DEFAULT "\N",
-	Forename VARCHAR(50),
-	Surname VARCHAR(50),
-	DateOfBirth DATE,
-	Nationality VARCHAR(50),
-	URL VARCHAR(2048)
+	DriverId INTEGER NOT NULL,
+	DriverRef VARCHAR(50) NOT NULL,
+	Number VARCHAR(5) DEFAULT '\N' NOT NULL,
+	Code VARCHAR(3) DEFAULT '\N' NOT NULL,
+	Forename VARCHAR(50) NOT NULL,
+	Surname VARCHAR(50) NOT NULL,
+	DateOfBirth DATE NOT NULL,
+	Nationality VARCHAR(50) NOT NULL,
+	URL VARCHAR(2048) NOT NULL,
 
 	CONSTRAINT pk_driver PRIMARY KEY(DriverId)
 );
 
 CREATE TABLE Races(
-	RaceId INTEGER,
-	Year VARCHAR(4),
-	Round INTEGER,
-	CircuitId INTEGER,
-	Name VARCHAR(100),
-	Date DATE,
-	Time TIME,
-	URL VARCHAR(2048),
+	RaceId INTEGER NOT NULL,
+	Year VARCHAR(4) NOT NULL,
+	Round INTEGER NOT NULL,
+	CircuitId INTEGER NOT NULL,
+	Name VARCHAR(100) NOT NULL,
+	Date DATE NOT NULL,
+	Time TIME NOT NULL,
+	URL VARCHAR(2048) NOT NULL,
 
 	CONSTRAINT pk_races PRIMARY KEY(RaceId),
 	CONSTRAINT fk_race_year FOREIGN KEY(Year) REFERENCES Seasons(Year)
 );
 
 CREATE TABLE Laptimes(
-	RaceId INTEGER,
-	DriverId INTEGER,
-	Lap INTEGER,
-	Position INTEGER,
-	Time TIME,
-	Milliseconds INTEGER,
+	RaceId INTEGER NOT NULL,
+	DriverId INTEGER NOT NULL,
+	Lap INTEGER NOT NULL,
+	Position INTEGER NOT NULL,
+	Time TIME NOT NULL,
+	Milliseconds INTEGER NOT NULL,
 
 	CONSTRAINT pk_laptime PRIMARY KEY(RaceId, DriverId, Lap),
 	CONSTRAINT fk_laptime_race FOREIGN KEY(RaceId) REFERENCES Races(RaceId)
 );
 
 CREATE TABLE Pitstops(
-	RaceId INTEGER,
-	DriverId INTEGER,
-	Stop INTEGER,
-	Lap INTEGER,
-	Time TIME,
-	Duration FLOAT,
-	Milliseconds INTEGER,
+	RaceId INTEGER NOT NULL,
+	DriverId INTEGER NOT NULL,
+	Stop INTEGER NOT NULL,
+	Lap INTEGER NOT NULL,
+	Time TIME NOT NULL,
+	Duration FLOAT NOT NULL,
+	Milliseconds INTEGER NOT NULL,
 
 	CONSTRAINT pk_pitstops PRIMARY KEY(RaceId, DriverId, Stop),
 	CONSTRAINT fk_pitstops_race FOREIGN KEY(RaceId) REFERENCES Races(RaceId),
@@ -149,15 +149,15 @@ CREATE TABLE Pitstops(
 );
 
 CREATE TABLE Qualifying(
-	QualifyId INTEGER,
-	RaceId INTEGER,
-	DriverId INTEGER,
-	ConstructorId INTEGER,
-	Number INTEGER,
-	Position INTEGER,
+	QualifyId INTEGER NOT NULL,
+	RaceId INTEGER NOT NULL,
+	DriverId INTEGER NOT NULL,
+	ConstructorId INTEGER NOT NULL,
+	Number INTEGER NOT NULL,
+	Position INTEGER NOT NULL,
 	Q1 VARCHAR(10) NOT NULL,
-	Q2 VARCHAR(10) DEFAULT "\N",
-	Q3 VARCHAR(10) DEFAULT "\N",
+	Q2 VARCHAR(10) DEFAULT '\N',
+	Q3 VARCHAR(10) DEFAULT '\N',
 
 	CONSTRAINT pk_qualifying PRIMARY KEY(QualifyId),
 	CONSTRAINT fk_qualifying_race FOREIGN KEY(RaceId) REFERENCES Races(RaceId),
@@ -166,13 +166,13 @@ CREATE TABLE Qualifying(
 );
 
 CREATE TABLE DriverStandings(
-	DriverStandingsId INTEGER,
-	RaceID INTEGER,
-	DriverId INTEGER,
-	Points INTEGER,
-	Position INTEGER,
-	PositionText INTEGER,
-	Win BOOLEAN DEFAULT FALSE,
+	DriverStandingsId INTEGER NOT NULL,
+	RaceID INTEGER NOT NULL,
+	DriverId INTEGER NOT NULL,
+	Points INTEGER NOT NULL,
+	Position INTEGER NOT NULL,
+	PositionText INTEGER NOT NULL,
+	Win BOOLEAN DEFAULT FALSE NOT NULL,
 
 	CONSTRAINT pk_driverstandings PRIMARY KEY(DriverStandingsId),
 	CONSTRAINT fk_driverstandings_race FOREIGN KEY(RaceId) REFERENCES Races(RaceId),
@@ -180,28 +180,28 @@ CREATE TABLE DriverStandings(
 );
 
 CREATE TABLE Results(
-	ResultId INTEGER,
-	RaceId INTEGER,
-	DriverId INTEGER,
-	ConstructorId INTEGER,
-	Number INTEGER,
-	Grid INTEGER,
-	Position VARCHAR(3) DEFAULT "\N",
-	PositionText VARCHAR(3) DEFAULT "R",
-	PositionOrder INTEGER,
-	Points INTEGER,
-	Laps INTEGER,
- 	Time VARCHAR(10) DEFAULT "\N",
- 	Milliseconds VARCHAR(8) DEFAULT "\N",
- 	FastestLap VARCHAR(3) DEFAULT "\N",
- 	Rank VARCHAR(3) DEFAULT "\N",
- 	FastestLapTime VARCHAR(10) DEFAULT "\N",
- 	FastestLapSpeed VARCHAR(10) DEFAULT "\N",
- 	StatusID INTEGER,
+	ResultId INTEGER NOT NULL,
+	RaceId INTEGER NOT NULL,
+	DriverId INTEGER NOT NULL,
+	ConstructorId INTEGER NOT NULL,
+	Number INTEGER NOT NULL,
+	Grid INTEGER NOT NULL,
+	Position VARCHAR(3) DEFAULT '\N' NOT NULL,
+	PositionText VARCHAR(3) DEFAULT 'R' NOT NULL,
+	PositionOrder INTEGER NOT NULL,
+	Points INTEGER NOT NULL,
+	Laps INTEGER NOT NULL,
+ 	Time VARCHAR(10) DEFAULT '\N' NOT NULL,
+ 	Milliseconds VARCHAR(8) DEFAULT '\N' NOT NULL,
+ 	FastestLap VARCHAR(3) DEFAULT '\N' NOT NULL,
+ 	Rank VARCHAR(3) DEFAULT '\N' NOT NULL,
+ 	FastestLapTime VARCHAR(10) DEFAULT '\N' NOT NULL,
+ 	FastestLapSpeed VARCHAR(10) DEFAULT '\N' NOT NULL,
+ 	StatusID INTEGER NOT NULL,
 
 	CONSTRAINT pk_results PRIMARY KEY(ResultId),
 	CONSTRAINT fk_results_race FOREIGN KEY(RaceId) REFERENCES Races(RaceId),
 	CONSTRAINT fk_results_driver FOREIGN KEY(DriverId) REFERENCES Driver(DriverId),
-	CONSTRAINT fk_results_constructor FOREIGN KEY(ConstructorId) REFERENCES Constructors(ConstructorId)
+	CONSTRAINT fk_results_constructor FOREIGN KEY(ConstructorId) REFERENCES Constructors(ConstructorId),
 	CONSTRAINT fk_results_status FOREIGN KEY(StatusId) REFERENCES Status(StatusId)
 );
