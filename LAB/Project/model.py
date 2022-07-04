@@ -12,13 +12,19 @@ class Formula1:
         self.cursor = self.connection.cursor()
 
     def perform_login(self, username:str, password:str):
+        '''
+        Returns:
+            * tuple: (User id, Username, tipo)
+        '''
         self.cursor.execute(f"select PerformLogin('{username}', '{password}');")
         response = self.cursor.fetchone()
 
         if True in response:
-            self.cursor.execute(f"select userid from users where login = '{username}';")
-            user_id = self.cursor.fetchone()[0]
-            return (user_id, username)
+            self.cursor.execute(f"select userid, tipo from users where login = '{username}';")
+            infos = self.cursor.fetchone()
+            user_id = infos[0]
+            tipo = infos[1]
+            return (user_id, username, tipo)
         
         raise ValueError('Wrong login or password')
 

@@ -6,6 +6,7 @@ from model import Formula1
 import config
 
 app = Flask(__name__, template_folder='templates')
+app.secret_key = 'f1'
 
 # connection = psycopg2.connect(host='localhost',
 #     database=config.DB_DATABASE,
@@ -22,22 +23,24 @@ def home():
     else:
         return render_template('home.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         try:
-            session['userid'], session['username'] = model.perform_login(
-                request.form['username'], request.form['password']
-            )
-            return redirect(url_for('/'))
+            session['userid'], session['username'], session['tipo'] = \
+                model.perform_login(
+                    request.form['username'], request.form['password']
+                )
+            return redirect(url_for('home'))
+            
         except ValueError as e:
             return render_template('login.html', message=str(e))
     else:
         if 'userid' in session:
-            return redirect(url_for('/'))
+            return redirect(url_for('home'))
             
         else:
             return render_template('login.html')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

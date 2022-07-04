@@ -20,8 +20,6 @@ FOR EACH ROW EXECUTE PROCEDURE EncryptPassword();
 
 insert into users values (0, 'admin', 'Admnistrador', null, 'admin');
 
-select * from users;
-
 CREATE TABLE log_table(
 	UserID integer,
 	Access TIMESTAMP,
@@ -45,5 +43,40 @@ CREATE OR REPLACE FUNCTION PerformLogin(Username VARCHAR(50), currPassword VARCH
 	END;
 $$ LANGUAGE PLPGSQL;
 
-select PerformLogin('admin', 'admin');
-SELECT * FROM log_table;
+CREATE OR REPLACE FUNCTION InsertUsers() RETURNS TRIGGER AS $$
+	DECLARE max_id INTEGER;
+	DECLARE type VARCHAR(50);
+	DECLARE suffix VARCHAR(50);
+	DECLARE ref VARCHAR(100);
+	DECLARE idorig INTEGER;
+	BEGIN
+		select max(userid) into max_id from users;
+		if TG_TABLE_NAME = 'constructors' then
+			type = 'Escuderia';
+			suffix = '_c';
+			ref = NEW.constructorref;
+			idorig = NEW.constructorid;
+		else
+			type = 'Piloto';
+			suffix = '_d';
+			ref = NEW.driverref;
+			idorig = NEW.driverid;
+		end if;
+		
+		perform * from user where login = concat(ref, suffix);
+		IF FOUND THEN
+			raise notice 'Usuário ja cadastrado';
+			return NULL;
+		END IF;
+		insert into USERS values(max_id + 1, concat(ref, suffix), type, idorig, ref);
+		return NEW;			
+	END;
+$$ LANGUAGE PLPGSQL;
+
+CREATE TRIGGER tr_insert_driver
+BEFORE INSERT on driver
+FOR EACH ROW EXECUTE PROCEDURE InsertUsers();
+
+CREATE TRIGGER tr_insert_scuderia
+BEFORE INSERT on constructors
+FOR EACH ROW EXECUTE PROCEDURE InsertUsers();
