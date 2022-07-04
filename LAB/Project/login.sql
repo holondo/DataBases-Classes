@@ -22,12 +22,21 @@ insert into users values (0, 'admin', 'Admnistrador', null, 'admin');
 
 select * from users;
 
+CREATE TABLE log_table(
+	UserID integer,
+	Access TIMESTAMP,
+	constraint pk_log PRIMARY KEY(UserID, Access),
+	constraint fk_log_user FOREIGN KEY(UserID) references Users(UserId)
+);
+
 CREATE OR REPLACE FUNCTION PerformLogin(Username VARCHAR(50), currPassword VARCHAR(50)) RETURNS BOOLEAN as $$
 	DECLARE userPassword VARCHAR(50);
+	DECLARE ID INTEGER;
 	BEGIN
-		select password into userPassword from Users where Login = Username;
+		select password, UserID into userPassword, ID from Users where Login = Username;
 		IF md5(currPassword) = userPassword THEN
 			RAISE NOTICE 'User logged';
+			insert into log_table values (ID, CURRENT_TIMESTAMP);
 			RETURN True;
 		ELSE 
 			RAISE NOTICE 'Wrong password';
@@ -36,4 +45,5 @@ CREATE OR REPLACE FUNCTION PerformLogin(Username VARCHAR(50), currPassword VARCH
 	END;
 $$ LANGUAGE PLPGSQL;
 
-select PerformLogin('admin', 'admin4');
+select PerformLogin('admin', 'admin');
+SELECT * FROM log_table;
