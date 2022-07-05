@@ -59,24 +59,32 @@ def logout():
 
 @app.route('/cadastrarpiloto', methods=['GET', 'POST'])
 def cadastrarPiloto():
-    print(request.method)
-    if request.method == 'POST':
-        try:
-            print(request.form['driverref'])
-            # model.create_piloto(
-            #     request.form['username'], request.form['password']
-            # )
-            return redirect(url_for('home'))
+    if session['user']['type'] == 'Administrador':
+        if request.method == 'POST':
+            request.form['']
+        else:
+            return render_template('cadastrar-piloto.html', user=session['user'], data=model.get_admin_data())
 
-        except ValueError as e:
-            return redirect(url_for('home'))
-    else:
-        return render_template('cadastrar-piloto.html', user=session['user'], data=model.get_admin_data())
-
+@app.route('/cadastrarescuderia', methods=['GET', 'POST'])
+def cadastrarEscuderia():
+    if session['user']['type'] == 'Administrador':
+        if request.method == 'POST':
+            request.form['']
+        else:
+            return render_template('cadastrar-escuderia.html', user=session['user'], data=model.get_admin_data())
 
 @app.route('/consultarpiloto', methods=['GET', 'POST'])
 def consultarPiloto():
-    return render_template('cadastrar-piloto.html', user=session['user'], data=model.get_admin_data())
+    if session['user']['type'] == 'Escuderia':
+        user:User = User(**session['user'])
+        if request.method == 'GET':
+             return render_template('consultar-piloto.html', user=session['user'], tabelas=model.get_tabelas_escuderia(user), tabelas_busca=None)
+        
+        elif request.method == 'POST':
+            busca = request.form['txt-query']
+            tabela_busca = model.get_pilotos_escuderia(busca, user)
+            return render_template('consultar-piloto.html', user=session['user'], tabelas=model.get_tabelas_escuderia(user), tabelas_busca=None)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

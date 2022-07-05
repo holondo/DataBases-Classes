@@ -162,14 +162,29 @@ class Formula1:
             raise ValueError('Usuário não é um Admin.')
 
         status_amnt = self.get_dataframe(
-            f"""select s.status, rs.contagem from status s
-                natural left join results_status rs
-                order by rs.contagem desc nulls last;"""
+            f"""select s.status, count(re.*) from status s
+                right join results re
+                    on re.statusid = s.statusid
+                group by s.status
+                order by 2 desc nulls last;"""
         )
         status_amnt.fillna(0, inplace=True)
         status_amnt['contagem'] = status_amnt['contagem'].astype('int32')
         return (status_amnt,)
 
+
+    def get_pilotos_escuderia(self, nome:str, user:User):
+        if not user.type == 'Escuderia':
+            raise ValueError('Usuário não é uma escuderia.')
+
+        return self.get_dataframe(f"""
+            select fullname(dr.driverid), dr.dateofbirth, dr.nationality
+            from driver dr
+            right join
+                (select distinct driverid from results where constructorid = {user.id_original}) as res
+                    on res.driverid = dr.driverid
+            where dr.forename like '%{nome}%';
+        """)
 
 if __name__ == '__main__':
     f1 = Formula1(config.DB_USER, config.DB_PWD, config.DB_DATABASE)

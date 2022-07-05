@@ -1,0 +1,79 @@
+{% extends "overview-admin.html" %} {% block modal %}
+<div
+  class="modal"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Nova Escuderia</h5>
+      </div>
+      <div class="modal-body">
+        <form action="#" method="post">
+          <div class="form-row">
+            <div class="col-md-12 mb-3">
+              <label for="validationDefault03">Escuderiaref</label>
+              <input
+                type="text"
+                class="form-control"
+                id="validationDefault03"
+                placeholder="Escuderiaref"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col-md-6 mb-3">
+              <label for="validationDefault01">Nome</label>
+              <input
+                type="text"
+                class="form-control"
+                id="validationDefault01"
+                placeholder="Name"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="validationDefault02">Nacionalidade</label>
+              <input
+                type="text"
+                class="form-control"
+                id="validationDefault02"
+                placeholder="Last name"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col-md-12 mb-3">
+              <label for="validationDefault04">URL de referência</label>
+              <input
+                type="text"
+                class="form-control"
+                id="validationDefault04"
+                placeholder="http://"
+                required
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a href="{{url_for('home')}}" class="btn btn-secondary">Cancelar</a>
+            <button class="btn btn-primary" type="submit">Cadastrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block script %}
+<script>
+  $(document).ready(() => {
+    console.log("window is loaded");
+    $("#exampleModal").modal("show");
+  });
+</script>
+{% endblock %}
