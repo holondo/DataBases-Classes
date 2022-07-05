@@ -21,7 +21,17 @@ def home():
     if 'user' not in session:
         return redirect(url_for('login'))
     else:
-        return render_template('home.html', user=session['user'])
+        user:User = User(**session['user'])
+
+        # if user['type'] == :
+        
+        if user.type == 'Escuderia':
+            overview = model.get_tabelas_escuderia(user)
+            return render_template('overview-scuderia.html', user=session['user'], tabelas=overview)
+
+        if user.type == 'Piloto':
+            overview = model.get_tabelas_piloto(user)
+            return render_template('overview-driver.html', user=session['user'], tabelas=overview)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
