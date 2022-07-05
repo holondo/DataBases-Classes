@@ -36,6 +36,31 @@
                 </tr>
               </tbody>
         </table>
+        <div>
+          {%for tabela in tabelas%}
+          <div>
+              <table class="table table-bordered">
+                  <tr>
+                  {%for column in tabela.columns%}
+                      <th>
+                          {{column}}
+                      </th>
+                  {% endfor %}
+                  </tr>
+                  {%for item in tabela.itertuples(index=False)%}
+                      <tr>
+                          {%for dado in item%}
+                              <td>
+                                  {{dado}}
+                              </td>
+                          {%endfor%}
+                      </tr>
+                  {%endfor%}    
+                </table>
+          </div>
+          {%endfor%}
+        </div>
+  </div>
     </div>
   </div>
 {% endblock %}

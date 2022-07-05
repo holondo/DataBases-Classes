@@ -8,12 +8,6 @@ import config
 app = Flask(__name__, template_folder='templates')
 app.secret_key = 'f1'
 
-# connection = psycopg2.connect(host='localhost',
-#     database=config.DB_DATABASE,
-#     user=config.DB_USER,
-#     password=config.DB_PWD)
-
-# cursor = connection.cursor()
 model = Formula1(config.DB_USER, config.DB_PWD, config.DB_DATABASE)
 
 @app.get('/')
@@ -22,8 +16,6 @@ def home():
         return redirect(url_for('login'))
     else:
         user:User = User(**session['user'])
-
-        # if user['type'] == :
         
         if user.type == 'Escuderia':
             overview = model.get_tabelas_escuderia(user)
@@ -35,7 +27,8 @@ def home():
 
         if user.type == 'Administrador':
             dataAdmin = model.get_admin_data()
-            return render_template('overview-admin.html', user=session['user'], data=dataAdmin)
+            tables = model.get_tabelas_admin(user)
+            return render_template('overview-admin.html', user=session['user'], data=dataAdmin, tabelas=tables)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -57,13 +50,20 @@ def login():
         else:
             return render_template('login.html')
 
+
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('login'))
 
+
 @app.route('/cadastrarpiloto', methods=['GET', 'POST'])
 def cadastrarPiloto():
+    return render_template('cadastrar-piloto.html', user=session['user'], data=model.get_admin_data())
+
+
+@app.route('/consultarpiloto', methods=['GET', 'POST'])
+def consultarPiloto():
     return render_template('cadastrar-piloto.html', user=session['user'], data=model.get_admin_data())
 
 if __name__ == '__main__':
