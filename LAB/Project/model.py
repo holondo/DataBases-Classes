@@ -171,6 +171,19 @@ class Formula1:
         return (status_amnt,)
 
 
+    def get_pilotos_escuderia(self, nome:str, user:User):
+        if not user.type == 'Escuderia':
+            raise ValueError('Usuário não é uma escuderia.')
+
+        return self.get_dataframe(f"""
+            select fullname(dr.driverid), dr.dateofbirth, dr.nationality
+            from driver dr
+            right join
+                (select distinct driverid from results where constructorid = {user.id_original}) as res
+                    on res.driverid = dr.driverid
+            where dr.forename like '%{nome}%';
+        """)
+
 if __name__ == '__main__':
     f1 = Formula1(config.DB_USER, config.DB_PWD, config.DB_DATABASE)
     f1.perform_login('admin', 'admin')

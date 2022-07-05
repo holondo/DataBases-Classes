@@ -1,0 +1,68 @@
+{% extends "overview-admin.html" %} {% block modal %}
+<div
+  class="modal"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Buscar pilotos da Escuderia</h5>
+      </div>
+      <div class="modal-body">
+        <form action="#" method="post">
+          <div class="form-row">
+            <div class="col-md-12 mb-3">
+              <label for="validationDefault03">Primeiro nome do piloto</label>
+              <input
+                type="text"
+                class="form-control"
+                id="validationDefault03"
+                name="txt-query"
+                placeholder="Primeiro nome"
+                required
+              />
+            </div>
+          </div>
+        </form>
+        {%if tabelas_busca%}
+        <div class="modal-body">
+            {%for tabela in tabelas_busca%}
+            <div>
+                <table class="table table-bordered">
+                    <tr>
+                    {%for column in tabela.columns%}
+                        <th>
+                            {{column}}
+                        </th>
+                    {% endfor %}
+                    </tr>
+                    {%for item in tabela.itertuples(index=False)%}
+                        <tr>
+                            {%for dado in item%}
+                                <td>
+                                    {{dado}}
+                                </td>
+                            {%endfor%}
+                        </tr>
+                    {%endfor%}    
+                  </table>
+            </div>
+            {%endfor%}
+        </div>
+        {%endif%}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block script %}
+<script>
+  $(document).ready(() => {
+    console.log("window is loaded");
+    $("#exampleModal").modal("show");
+  });
+</script>
+{% endblock %}
