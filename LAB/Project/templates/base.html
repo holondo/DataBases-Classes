@@ -10,7 +10,7 @@
   </head>
   <body>
     <div><a href="/">Home</a></div>
-    {% if user %} Seja Bem Vindo, {{session['username']}}! {% endif %}
+    {% if user %} Seja Bem Vindo, {{user.full_name}}! {% endif %}
     <hr />
     {% block content %}{% endblock %}
   </body>
