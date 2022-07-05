@@ -2,7 +2,7 @@ from email import message
 from flask import Flask, flash, render_template, url_for, redirect, request, session
 import psycopg2
 
-from model import Formula1, User
+from model import Formula1, User 
 import config
 
 app = Flask(__name__, template_folder='templates')
@@ -21,7 +21,19 @@ def home():
     if 'user' not in session:
         return redirect(url_for('login'))
     else:
-        return render_template('home.html', user=session['user'])
+        # if User.type == 'Admin':
+            dataAdmin = {"nroPilotos": 0, "nroEscuderias": 0, "nroCorridas": 0, "nroTemporadas": 0}
+            model.cursor.execute(query='SELECT COUNT (*) from DRIVER')
+            dataAdmin['nroPilotos'] =  model.cursor.fetchone()[0]
+            model.cursor.execute(query='SELECT COUNT(*) FROM CONSTRUCTORS;')
+            dataAdmin['nroEscuderias'] =  model.cursor.fetchone()[0]
+            model.cursor.execute(query='SELECT COUNT(*) FROM RACES;')
+            dataAdmin['nroCorridas'] =  model.cursor.fetchone()[0]
+            model.cursor.execute(query='SELECT COUNT(*) FROM SEASONS;')
+            dataAdmin['nroTemporadas'] =  model.cursor.fetchone()[0]
+            return render_template('overview-admin.html', user=session['user'], data=dataAdmin)
+        # else:
+        #     return render_template('home.html', user=session['user'])
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
