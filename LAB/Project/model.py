@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 import pandas as pd
 import psycopg2
 import config
@@ -44,7 +45,7 @@ class Formula1:
                         when tipo = 'Escuderia' then 
                             (select name from constructors where constructorid = idoriginal limit 1)
                         else
-                            FullName(userid)
+                            FullName(idoriginal)
                     END
                     from users
                     where login = '{username}';"""
@@ -162,7 +163,7 @@ class Formula1:
             raise ValueError('Usuário não é um Admin.')
 
         status_amnt = self.get_dataframe(
-            f"""select s.status, count(re.*) from status s
+            f"""select s.status, count(re.*) as contagem from status s
                 right join results re
                     on re.statusid = s.statusid
                 group by s.status
@@ -178,13 +179,47 @@ class Formula1:
             raise ValueError('Usuário não é uma escuderia.')
 
         return self.get_dataframe(f"""
-            select fullname(dr.driverid), dr.dateofbirth, dr.nationality
+            select fullname(dr.driverid) as Nome, dr.dateofbirth as nascimento, dr.nationality as nacionalidade
             from driver dr
             right join
                 (select distinct driverid from results where constructorid = {user.id_original}) as res
                     on res.driverid = dr.driverid
             where dr.forename like '%{nome}%';
         """)
+
+
+    def cadastrar_escuderia(self, escuderiaref:str, nome:str, nacionalidade:str, url:str):
+        self.cursor.execute(f"""
+            insert into constructors values (
+                (select max(constructorid) + 1 from constructors), 
+                '{escuderiaref}',
+                '{nome}',
+                '{nacionalidade}',
+                '{url}'
+            );
+        """)
+
+        self.connection.commit()
+        print('cadastrado com sucesso!')
+
+
+    def cadastrar_piloto(self, driverref:str, numero:str, codigo:str, forename:str, surname:str, date:str, nationality:str):
+        self.cursor.execute(f"""
+            insert into driver values (
+                (select max(driverid) + 1 from driver),
+                '{driverref}',
+                '{numero}',
+                '{codigo}',
+                '{forename}',
+                '{surname}',
+                '{datetime.strptime(date, '%d/%m/%Y')}',
+                '{nationality}',
+                ''
+            );
+        """)
+
+        self.connection.commit()
+        print('cadastrado com sucesso!')
 
 if __name__ == '__main__':
     f1 = Formula1(config.DB_USER, config.DB_PWD, config.DB_DATABASE)

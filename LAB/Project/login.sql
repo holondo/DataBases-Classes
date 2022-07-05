@@ -63,7 +63,7 @@ CREATE OR REPLACE FUNCTION InsertUsers() RETURNS TRIGGER AS $$
 			idorig = NEW.driverid;
 		end if;
 		
-		perform * from user where login = concat(ref, suffix);
+		perform * from users where login = concat(ref, suffix);
 		IF FOUND THEN
 			raise notice 'Usuário ja cadastrado';
 			return NULL;
