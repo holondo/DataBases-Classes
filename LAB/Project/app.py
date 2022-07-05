@@ -2,7 +2,7 @@ from email import message
 from flask import Flask, flash, render_template, url_for, redirect, request, session
 import psycopg2
 
-from model import Formula1
+from model import Formula1, User
 import config
 
 app = Flask(__name__, template_folder='templates')
@@ -18,25 +18,25 @@ model = Formula1(config.DB_USER, config.DB_PWD, config.DB_DATABASE)
 
 @app.get('/')
 def home():
-    if 'userid' not in session:
+    if 'user' not in session:
         return redirect(url_for('login'))
     else:
-        return render_template('home.html')
+        return render_template('home.html', user=session['user'])
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         try:
-            session['userid'], session['username'], session['tipo'] = \
+            session['user'] = \
                 model.perform_login(
                     request.form['username'], request.form['password']
                 )
             return redirect(url_for('home'))
-            
+
         except ValueError as e:
             return render_template('login.html', message=str(e))
     else:
-        if 'userid' in session:
+        if 'user' in session:
             return redirect(url_for('home'))
             
         else:

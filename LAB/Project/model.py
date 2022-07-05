@@ -1,5 +1,17 @@
+from dataclasses import dataclass
 import psycopg2
 import config
+
+
+# enum Type
+@dataclass
+class User():
+    user_id:int
+    username:str
+    type:str
+    id_original:int
+    full_name:str
+    
 
 class Formula1:
     def __init__(self, username:str, password:str, database:str) -> None:
@@ -11,20 +23,40 @@ class Formula1:
         )
         self.cursor = self.connection.cursor()
 
-    def perform_login(self, username:str, password:str):
+    def perform_login(self, username:str, password:str) -> User:
         '''
         Returns:
-            * tuple: (User id, Username, tipo)
+            * User
         '''
+
         self.cursor.execute(f"select PerformLogin('{username}', '{password}');")
         response = self.cursor.fetchone()
 
         if True in response:
-            self.cursor.execute(f"select userid, tipo from users where login = '{username}';")
+            self.cursor.execute(
+                f"""select 
+                    userid,
+                    login, 
+                    tipo, 
+                    idoriginal, 
+                    CASE 
+                        when tipo = 'administrador' then 'Admin'
+                        when tipo = 'escuderia' then 
+                            (select name from constructors where constructorid = idoriginal limit 1)
+                        else
+                            FullName(userid)
+                    END
+                    from users
+                    where login = '{username}';"""
+            )
             infos = self.cursor.fetchone()
-            user_id = infos[0]
-            tipo = infos[1]
-            return (user_id, username, tipo)
+            logged_user = User(infos[0], infos[1], infos[2], infos[3], infos[4])
+            # if logged_user.type == 'administrador':
+            #     logged_user.full_name == 'Admin'
+            # elif logged_user.type == 'Escuderia':
+            #     logged_user.full_name = 
+           
+            return logged_user
         
         raise ValueError('Wrong login or password')
 
