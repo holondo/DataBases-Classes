@@ -1,4 +1,4 @@
-{% extends "overview-admin.html" %} {% block modal %}
+{% extends "overview-scuderia.html" %} {% block modal %}
 <div
   class="modal"
   id="exampleModal"
@@ -15,7 +15,7 @@
       <div class="modal-body">
         <form action="#" method="post">
           <div class="form-row">
-            <div class="col-md-12 mb-3">
+            <div class="col-md-8 mb-3">
               <label for="validationDefault03">Primeiro nome do piloto</label>
               <input
                 type="text"
@@ -25,6 +25,10 @@
                 placeholder="Primeiro nome"
                 required
               />
+            </div>
+            <div class="col-md-4 mb-3">
+              <button class="btn btn-primary" type="submit">Buscar</button>
+              <a href="{{url_for('home')}}" class="btn btn-secondary float-right">Cancelar</a>
             </div>
           </div>
         </form>

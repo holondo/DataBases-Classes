@@ -16,6 +16,7 @@ def home():
         return redirect(url_for('login'))
     else:
         user:User = User(**session['user'])
+        print(user)
         
         if user.type == 'Escuderia':
             overview = model.get_tabelas_escuderia(user)
@@ -61,15 +62,33 @@ def logout():
 def cadastrarPiloto():
     if session['user']['type'] == 'Administrador':
         if request.method == 'POST':
-            request.form['']
+            driverref = request.form['txt-driverref']
+            numero = request.form['txt-numero']
+            codigo = request.form['txt-codigo']
+            forename = request.form['txt-forename']
+            surname = request.form['txt-surname']
+            date = request.form['txt-date']
+            nationality = request.form['txt-nationality']
+
+            model.cadastrar_piloto(driverref, numero, codigo, forename, surname, date, nationality)
+
+            return redirect(url_for('home'))
+            
         else:
             return render_template('cadastrar-piloto.html', user=session['user'], data=model.get_admin_data())
+
 
 @app.route('/cadastrarescuderia', methods=['GET', 'POST'])
 def cadastrarEscuderia():
     if session['user']['type'] == 'Administrador':
         if request.method == 'POST':
-            request.form['']
+            escuderiaref = request.form['txt-escuderiaref']
+            nome = request.form['txt-nome']
+            nacionalidade = request.form['txt-nacionalidade']
+            url = request.form['txt-url']
+            model.cadastrar_escuderia(escuderiaref, nome, nacionalidade, url)
+
+            return redirect(url_for('home'))
         else:
             return render_template('cadastrar-escuderia.html', user=session['user'], data=model.get_admin_data())
 
@@ -78,13 +97,14 @@ def cadastrarEscuderia():
 def consultarPiloto():
     if session['user']['type'] == 'Escuderia':
         user:User = User(**session['user'])
+        # user.id_original = 3
         if request.method == 'GET':
-             return render_template('consultar-piloto.html', user=session['user'], tabelas=model.get_tabelas_escuderia(user), tabelas_busca=None)
+             return render_template('consultar-pilotos.html', user=session['user'],data=model.get_admin_data(), tabelas=model.get_tabelas_escuderia(user), tabelas_busca=None)
         
         elif request.method == 'POST':
             busca = request.form['txt-query']
             tabela_busca = model.get_pilotos_escuderia(busca, user)
-            return render_template('consultar-piloto.html', user=session['user'], tabelas=model.get_tabelas_escuderia(user), tabelas_busca=None)
+            return render_template('consultar-pilotos.html', user=user, data=model.get_admin_data(), tabelas=model.get_tabelas_escuderia(user), tabelas_busca=[tabela_busca])
 
 
 if __name__ == '__main__':
