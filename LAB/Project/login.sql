@@ -18,7 +18,7 @@ CREATE TRIGGER tr_encrypt
 BEFORE INSERT OR UPDATE ON Users
 FOR EACH ROW EXECUTE PROCEDURE EncryptPassword();
 
-insert into users values (0, 'admin', 'Admnistrador', null, 'admin');
+insert into users values (0, 'admin', 'Administrador', null, 'admin');
 
 CREATE TABLE log_table(
 	UserID integer,

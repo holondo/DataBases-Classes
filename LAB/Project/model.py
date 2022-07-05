@@ -40,8 +40,8 @@ class Formula1:
                     tipo, 
                     idoriginal, 
                     CASE 
-                        when tipo = 'administrador' then 'Admin'
-                        when tipo = 'escuderia' then 
+                        when tipo = 'Administrador' then 'Admin'
+                        when tipo = 'Escuderia' then 
                             (select name from constructors where constructorid = idoriginal limit 1)
                         else
                             FullName(userid)
@@ -153,8 +153,22 @@ class Formula1:
         overview = overview.T
 
         victory_report = self.get_dataframe(f"select * from GetVictoryReport_Driver({user.id_original});")
+        victory_report.fillna('Todos', inplace=True)
         status_report = self.get_dataframe(f"select * from GetStatusReport_Driver({user.id_original});")
         return overview, victory_report, status_report
+
+    def get_tabelas_admin(self, user:User):
+        if not user.type == 'Administrador':
+            raise ValueError('Usuário não é um Admin.')
+
+        status_amnt = self.get_dataframe(
+            f"""select s.status, rs.contagem from status s
+                natural left join results_status rs
+                order by rs.contagem desc nulls last;"""
+        )
+        status_amnt.fillna(0, inplace=True)
+        status_amnt['contagem'] = status_amnt['contagem'].astype('int32')
+        return (status_amnt,)
 
 
 if __name__ == '__main__':

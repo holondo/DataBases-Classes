@@ -1,29 +1,35 @@
-{% extends "base.html" %} {% block content %}
-<div>
-  I'm home
+{% extends "base.html" %} 
+{% block content %}
   <div>
-    {%for tabela in tabelas%}
-    <div>
-        <table>
-            <tr>
-            {%for column in tabela.columns%}
-                <th>
-                    {{column}}
-                </th>
-            {% endfor %}
-            </tr>
-            {%for item in tabela.itertuples(index=False)%}
-                <tr>
-                    {%for dado in item%}
-                        <td>
-                            {{dado}}
-                        </td>
-                    {%endfor%}
-                </tr>
-            {%endfor%}    
-          </table>
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <h2>Overview</h2>
+        </div>
+        <hr />
+        <div>
+            {%for tabela in tabelas%}
+            <div>
+                <table class="table table-bordered">
+                    <tr>
+                    {%for column in tabela.columns%}
+                        <th>
+                            {{column}}
+                        </th>
+                    {% endfor %}
+                    </tr>
+                    {%for item in tabela.itertuples(index=False)%}
+                        <tr>
+                            {%for dado in item%}
+                                <td>
+                                    {{dado}}
+                                </td>
+                            {%endfor%}
+                        </tr>
+                    {%endfor%}    
+                  </table>
+            </div>
+            {%endfor%}
+          </div>
     </div>
-    {%endfor%}
   </div>
-</div>
 {% endblock %}
