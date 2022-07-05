@@ -162,9 +162,11 @@ class Formula1:
             raise ValueError('Usuário não é um Admin.')
 
         status_amnt = self.get_dataframe(
-            f"""select s.status, rs.contagem from status s
-                natural left join results_status rs
-                order by rs.contagem desc nulls last;"""
+            f"""select s.status, count(re.*) from status s
+                right join results re
+                    on re.statusid = s.statusid
+                group by s.status
+                order by 2 desc nulls last;"""
         )
         status_amnt.fillna(0, inplace=True)
         status_amnt['contagem'] = status_amnt['contagem'].astype('int32')
