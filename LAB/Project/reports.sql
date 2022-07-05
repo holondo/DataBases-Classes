@@ -37,8 +37,11 @@ CREATE OR REPLACE FUNCTION GetDriversReport_Scuderia(CurrConstructorId INTEGER) 
 		);
 	END;
 $$ LANGUAGE PLPGSQL;
+			
+CREATE INDEX idx_3 ON RESULTS (constructorid) include (driverid); 
 
 
+-- 4
 CREATE OR REPLACE FUNCTION GetStatusReport_Scuderia(CurrConstructorId INTEGER) RETURNS TABLE(Status VARCHAR(100), Quantidade INTEGER) AS $$
 	BEGIN
 		return query(
@@ -122,4 +125,5 @@ select fullname(dr.driverid), dr.dateofbirth, dr.nationality
                 (select distinct driverid from results where constructorid = 3) as res
                     on res.driverid = dr.driverid
             where dr.forename like '%%';*/
+
 
