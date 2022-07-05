@@ -12,6 +12,9 @@ CREATE OR REPLACE FUNCTION FullName(CurrDriverId INTEGER) RETURNS VARCHAR(100) A
 	DECLARE fname VARCHAR(100);
 	BEGIN
 		select concat(forename, ' ', surname) into fname from driver where driverid = CurrDriverId;
+		if fname is null then
+			fname = 'Admin';
+		end if;
 		return fname;
 	END;
 $$ LANGUAGE PLPGSQL;
@@ -76,12 +79,12 @@ $$ LANGUAGE PLPGSQL;
 
 select 
 	case
-		when (ra.year is not null) then '* Todos * '
+		when (ra.year not null) then '* Todos * '
 		else
 			ra.year
 	end as Ano,
 	case
-		when (ra.name is not null) then '* Todas *'
+		when (ra.name not null) then '* Todas *'
 		else
 			ra.name
 	end as Corrida,
