@@ -29,7 +29,6 @@ class Formula1:
         Returns:
             * User
         '''
-
         self.cursor.execute(f"select PerformLogin('{username}', '{password}');")
         response = self.cursor.fetchone()
 
@@ -52,11 +51,7 @@ class Formula1:
             )
             infos = self.cursor.fetchone()
             logged_user = User(infos[0], infos[1], infos[2], infos[3], infos[4])
-            # if logged_user.type == 'administrador':
-            #     logged_user.full_name == 'Admin'
-            # elif logged_user.type == 'Escuderia':
-            #     logged_user.full_name = 
-           
+        
             return logged_user
         
         raise ValueError('Wrong login or password')
@@ -65,6 +60,21 @@ class Formula1:
     def get_dataframe(self, query:str) -> pd.DataFrame:
         table = pd.read_sql(query, self.connection)
         return table
+
+    def dataframe_to_html_table(self, df:pd.DataFrame, width:str=None, remove_index:bool=False) -> str:
+        df.style.format("{:.2f}")
+
+        df_style = df.style
+
+        if remove_index:
+            df_style = df_style.hide_index()
+
+        if width:
+            df_style = df_style.set_table_attributes(f'width={width}')
+
+        df_html = df_style.render(precision=2)
+
+        return df_html
 
 if __name__ == '__main__':
     f1 = Formula1(config.DB_USER, config.DB_PWD, config.DB_DATABASE)
