@@ -53,7 +53,19 @@ def logout():
 
 @app.route('/cadastrarpiloto', methods=['GET', 'POST'])
 def cadastrarPiloto():
-    return render_template('cadastrar-piloto.html', user=session['user'], data=model.get_admin_data())
+    print(request.method)
+    if request.method == 'POST':
+        try:
+            print(request.form['driverref'])
+            # model.create_piloto(
+            #     request.form['username'], request.form['password']
+            # )
+            return redirect(url_for('home'))
+
+        except ValueError as e:
+            return redirect(url_for('home'))
+    else:
+        return render_template('cadastrar-piloto.html', user=session['user'], data=model.get_admin_data())
 
 if __name__ == '__main__':
     app.run(debug=True)

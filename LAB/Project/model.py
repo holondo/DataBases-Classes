@@ -88,9 +88,9 @@ class Formula1:
         dataAdmin['nroTemporadas'] =  self.cursor.fetchone()[0]
         return dataAdmin
     
-    # def create_piloto(self, username:str, password:str) -> str:
-    #     self.cursor.execute(query ="")
-    #     return 'OK'
+    def create_piloto(self, username:str, password:str) -> str:
+        self.cursor.execute(query ="")
+        return 'OK'
 
 if __name__ == '__main__':
     f1 = Formula1(config.DB_USER, config.DB_PWD, config.DB_DATABASE)
