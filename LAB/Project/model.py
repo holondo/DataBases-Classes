@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import pandas as pd
 import psycopg2
 import config
 
@@ -60,7 +61,12 @@ class Formula1:
         
         raise ValueError('Wrong login or password')
 
+    
+    def get_dataframe(self, query:str) -> pd.DataFrame:
+        table = pd.read_sql(query, self.connection)
+        return table
 
 if __name__ == '__main__':
     f1 = Formula1(config.DB_USER, config.DB_PWD, config.DB_DATABASE)
     f1.perform_login('admin', 'admin')
+    f1.get_dataframe('select * from races limit 10;')
