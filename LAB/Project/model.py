@@ -120,6 +120,7 @@ class Formula1:
         
         overview = pd.DataFrame(data=[vitorias, pilotos_amnt, ano_inicio, ano_fim], index=['Vitórias', 'Quantidade de pilotos', 'Ano de início', 'Ultima competição'])
         overview = overview.T
+        overview.fillna('Nenhum', inplace=True)
 
         drivers_report = self.get_dataframe(f"select * from GetDriversReport_Scuderia({user.id_original});")
         status_report = self.get_dataframe(f"select * from GetStatusReport_Scuderia({user.id_original});")
@@ -152,6 +153,8 @@ class Formula1:
         
         overview = pd.DataFrame(data=[vitorias, ano_inicio, ano_fim], index=['Vitórias', 'Ano de início', 'Ultima competição'])
         overview = overview.T
+        overview['Vitórias'] = overview['Vitórias'].astype('int32')
+        overview.fillna('Nenhum', inplace=True)
 
         victory_report = self.get_dataframe(f"select * from GetVictoryReport_Driver({user.id_original});")
         victory_report.fillna('Todos', inplace=True)
