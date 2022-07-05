@@ -2,7 +2,7 @@ from email import message
 from flask import Flask, flash, render_template, url_for, redirect, request, session
 import psycopg2
 
-from model import Formula1, User
+from model import Formula1, User 
 import config
 
 app = Flask(__name__, template_folder='templates')
@@ -33,6 +33,11 @@ def home():
             overview = model.get_tabelas_piloto(user)
             return render_template('overview-driver.html', user=session['user'], tabelas=overview)
 
+        # if User.type == 'Admin':
+            dataAdmin = model.get_admin_data()
+            return render_template('overview-admin.html', user=session['user'], data=dataAdmin)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -56,6 +61,10 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('login'))
+
+@app.route('/cadastrarpiloto', methods=['GET', 'POST'])
+def cadastrarPiloto():
+    return render_template('cadastrar-piloto.html', user=session['user'], data=model.get_admin_data())
 
 if __name__ == '__main__':
     app.run(debug=True)

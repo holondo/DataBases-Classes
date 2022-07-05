@@ -1,11 +1,41 @@
-{% extends "base.html" %} {% block content %}
-<div>
-  I'm home
+{% extends "base.html" %} 
+{% block content %}
   <div>
-    - quantidade de pilotos cadastrados: {{nroPilotos}} <br />
-    – quantidade de escuderias cadastradas: {{nroEscuderias}} <br />
-    - quantidade de corridas cadastradas: {{nroCorridas}} <br />
-    – quantidade de temporadas (seasons) cadastradas: {{nroTemporadas}} <br />
+    <div class="container">
+        <div class="d-flex justify-content-between" >
+            <h2>Overview</h2>
+            <div> 
+                <a href="{{url_for('cadastrarPiloto')}}" class="btn btn-outline-primary">Cadastrar Piloto</a>
+                <button type="button" class="btn btn-outline-secondary">Cadastrar Escuderia</button>
+            </div>
+        </div>
+        <hr />
+        <table class="table table-bordered"">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Quantidade</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Pilotos</th>
+                  <td>{{data['nroPilotos']}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Escuderias</th>
+                  <td>{{data['nroEscuderias']}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Corridas</th>
+                  <td>{{data['nroCorridas']}}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Temporadas</th>
+                  <td>{{data['nroTemporadas']}}</td>
+                </tr>
+              </tbody>
+        </table>
+    </div>
   </div>
-</div>
 {% endblock %}

@@ -75,6 +75,22 @@ class Formula1:
         df_html = df_style.render(precision=2)
 
         return df_html
+    
+    def get_admin_data(self) -> dict[str, int]:
+        dataAdmin = {"nroPilotos": 0, "nroEscuderias": 0, "nroCorridas": 0, "nroTemporadas": 0}
+        self.cursor.execute(query='SELECT COUNT (*) from DRIVER;')
+        dataAdmin['nroPilotos'] =  self.cursor.fetchone()[0]
+        self.cursor.execute(query='SELECT COUNT(*) FROM CONSTRUCTORS;')
+        dataAdmin['nroEscuderias'] =  self.cursor.fetchone()[0]
+        self.cursor.execute(query='SELECT COUNT(*) FROM RACES;')
+        dataAdmin['nroCorridas'] =  self.cursor.fetchone()[0]
+        self.cursor.execute(query='SELECT COUNT(*) FROM SEASONS;')
+        dataAdmin['nroTemporadas'] =  self.cursor.fetchone()[0]
+        return dataAdmin
+    
+    # def create_piloto(self, username:str, password:str) -> str:
+    #     self.cursor.execute(query ="")
+    #     return 'OK'
 
     
     def get_tabelas_escuderia(self, user:User):

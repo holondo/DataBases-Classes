@@ -1,0 +1,109 @@
+{% extends "overview-admin.html" %} {% block modal %}
+<div
+  class="modal"
+  id="exampleModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Novo Piloto</h5>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-row">
+            <div class="col-md-4 mb-3">
+              <label for="validationDefault03">Driverref</label>
+              <input
+                type="text"
+                class="form-control"
+                id="validationDefault03"
+                placeholder="Driverref"
+                required
+              />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="validationDefault04">Número</label>
+              <input
+                type="text"
+                class="form-control"
+                id="validationDefault04"
+                placeholder="Number"
+                required
+              />
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="validationDefault05">Código</label>
+              <input
+                type="text"
+                class="form-control"
+                id="validationDefault05"
+                placeholder="Code"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col-md-6 mb-3">
+              <label for="validationDefault01">Forename</label>
+              <input
+                type="text"
+                class="form-control"
+                id="validationDefault01"
+                placeholder="First name"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="validationDefault02">Surname</label>
+              <input
+                type="text"
+                class="form-control"
+                id="validationDefault02"
+                placeholder="Last name"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="col-md-6 mb-3">
+              <label for="validationDefault03">Data de Nascimento</label>
+              <input
+                type="text"
+                class="form-control"
+                id="validationDefault03"
+                placeholder="XX/XX/XXXX"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="validationDefault04">Nacionalidade</label>
+              <input
+                type="text"
+                class="form-control"
+                id="validationDefault04"
+                placeholder="Nationality"
+                required
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a href="{{url_for('home')}}" class="btn btn-secondary">Cancelar</a>
+            <button class="btn btn-primary" type="submit">Cadastrar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block script %}
+<script>
+  $(document).ready(() => {
+    console.log("window is loaded");
+    $("#exampleModal").modal("show");
+  });
+</script>
+{% endblock %}
