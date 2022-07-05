@@ -40,8 +40,8 @@ class Formula1:
                     tipo, 
                     idoriginal, 
                     CASE 
-                        when tipo = 'administrador' then 'Admin'
-                        when tipo = 'escuderia' then 
+                        when tipo = 'Administrador' then 'Admin'
+                        when tipo = 'Escuderia' then 
                             (select name from constructors where constructorid = idoriginal limit 1)
                         else
                             FullName(userid)

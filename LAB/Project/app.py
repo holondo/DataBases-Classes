@@ -33,7 +33,7 @@ def home():
             overview = model.get_tabelas_piloto(user)
             return render_template('overview-driver.html', user=session['user'], tabelas=overview)
 
-        # if User.type == 'Admin':
+        if user.type == 'Administrador':
             dataAdmin = model.get_admin_data()
             return render_template('overview-admin.html', user=session['user'], data=dataAdmin)
 
