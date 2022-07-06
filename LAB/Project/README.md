@@ -12,7 +12,8 @@ Para rodar o programa, siga estas etapas:
 
 ### Configurando o Banco de Dados
 - Rode o servidor do banco de dados localmente;
-- Acesse o arquivo config.py e altere as seguintes variáveis de acordo com o seu usuário, senha e nome de banco:
+- Execute os scripts `login.sql` e `reports.sql` no seu SGBD;
+- Acesse o arquivo config.py e altere as seguintes variáveis de acordo com o seu usuário, senha e nome da base de dados:
 ```
 DB_USER = 'postgres'
 DB_PWD = 'password'
