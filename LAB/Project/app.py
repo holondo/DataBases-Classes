@@ -36,16 +36,19 @@ def reports():
     user:User = User(**session['user'])
         
     if user.type == 'Escuderia':
+        titulos = ["1. Listagem de pilotos.", "2. Quantidade de resultados por status."]
         tabelas = model.get_tabelas_escuderia(user)
-        return render_template('reports.html', user=session['user'], tabelas=tabelas)
+        return render_template('reports.html', user=session['user'], tabelas=tabelas, titulos=titulos)
 
     if user.type == 'Piloto':
+        titulos = ["1. Quantidade de vitórias obtidas por ano e corrida","2. Quantidade de resultados por status."]
         tabelas = model.get_tabelas_piloto(user)
-        return render_template('reports.html', user=session['user'], tabelas=tabelas)
+        return render_template('reports.html', user=session['user'], tabelas=tabelas, titulos=titulos)
 
     if user.type == 'Administrador':
+        titulos = ["1. Quantidade de resultados por status."]
         tabelas = model.get_tabelas_admin(user)
-        return render_template('reports.html', user=session['user'], tabelas=tabelas)
+        return render_template('reports.html', user=session['user'], tabelas=tabelas, titulos=titulos)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
