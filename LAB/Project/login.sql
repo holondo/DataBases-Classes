@@ -63,7 +63,7 @@ CREATE OR REPLACE FUNCTION InsertUsers() RETURNS TRIGGER AS $$
 			idorig = NEW.driverid;
 		end if;
 		
-		perform * from user where login = concat(ref, suffix);
+		perform * from users where login = concat(ref, suffix);
 		IF FOUND THEN
 			raise notice 'Usuário ja cadastrado';
 			return NULL;
@@ -80,3 +80,40 @@ FOR EACH ROW EXECUTE PROCEDURE InsertUsers();
 CREATE TRIGGER tr_insert_scuderia
 BEFORE INSERT on constructors
 FOR EACH ROW EXECUTE PROCEDURE InsertUsers();
+
+-- LOGIN
+CREATE OR REPLACE FUNCTION InsertUser() RETURNS TRIGGER AS $$
+	BEGIN
+		NEW.userid = (select max(userid)+1 from users);
+		RETURN NEW;
+	END;
+$$ LANGUAGE PLPGSQL;
+
+CREATE TRIGGER tr_insert
+BEFORE INSERT ON Users
+FOR EACH ROW EXECUTE PROCEDURE InsertUser();
+
+
+insert into users
+	(select 
+	 	null,
+		concat(con.constructorref, '_c'),
+	 	'Escuderia',
+	 	con.constructorid,
+	 	con.constructorref
+	 from constructors con
+	 where con.constructorid < (select max(constructorid) from constructors)
+);
+
+insert into users
+	(select 
+	 	null,
+		concat(driverref, '_d'),
+	 	'Piloto',
+	 	driverid,
+	 	driverref
+	 from driver
+	 where driverid < (select max(driverid) from driver)
+);
+	
+	
