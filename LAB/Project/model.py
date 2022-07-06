@@ -182,7 +182,7 @@ class Formula1:
             raise ValueError('Usuário não é uma escuderia.')
 
         return self.get_dataframe(f"""
-            select fullname(dr.driverid) as Nome, dr.dateofbirth as nascimento, dr.nationality as nacionalidade
+            select fullname(dr.driverid) as Nome, dr.dob as nascimento, dr.nationality as nacionalidade
             from driver dr
             right join
                 (select distinct driverid from results where constructorid = {user.id_original}) as res
