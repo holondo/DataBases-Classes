@@ -10,13 +10,18 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Buscar pilotos da Escuderia</h5>
+        <h5 class="modal-title" id="exampleModalLabel">
+          Buscar pilotos da Escuderia
+        </h5>
+        <a href="{{url_for('home')}}" class="btn btn-secondary float-right"
+          >&times;</a
+        >
       </div>
       <div class="modal-body">
         <form action="#" method="post">
+          <label for="validationDefault03">Primeiro nome do piloto</label>
           <div class="form-row">
-            <div class="col-md-8 mb-3">
-              <label for="validationDefault03">Primeiro nome do piloto</label>
+            <div class="col-md-10 mb-3">
               <input
                 type="text"
                 class="form-control"
@@ -26,36 +31,31 @@
                 required
               />
             </div>
-            <div class="col-md-4 mb-3">
+            <div class="col-md-2 mb-3">
               <button class="btn btn-primary" type="submit">Buscar</button>
-              <a href="{{url_for('home')}}" class="btn btn-secondary float-right">Cancelar</a>
             </div>
           </div>
         </form>
         {%if tabelas_busca%}
         <div class="modal-body">
-            {%for busca in tabelas_busca%}
-            <div>
-                <table class="table table-bordered">
-                    <tr>
-                    {%for column in busca.columns%}
-                        <th>
-                            {{column}}
-                        </th>
-                    {% endfor %}
-                    </tr>
-                    {%for item in busca.itertuples(index=False)%}
-                        <tr>
-                            {%for dado in item%}
-                                <td>
-                                    {{dado}}
-                                </td>
-                            {%endfor%}
-                        </tr>
-                    {%endfor%}    
-                  </table>
-            </div>
-            {%endfor%}
+          {%for busca in tabelas_busca%}
+          <div>
+            <table class="table table-bordered">
+              <tr>
+                {%for column in busca.columns%}
+                <th>{{column}}</th>
+                {% endfor %}
+              </tr>
+              {%for item in busca.itertuples(index=False)%}
+              <tr>
+                {%for dado in item%}
+                <td>{{dado}}</td>
+                {%endfor%}
+              </tr>
+              {%endfor%}
+            </table>
+          </div>
+          {%endfor%}
         </div>
         {%endif%}
       </div>
