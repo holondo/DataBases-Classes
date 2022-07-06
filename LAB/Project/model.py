@@ -98,7 +98,7 @@ class Formula1:
         if not user.type == 'Escuderia':
             raise ValueError('Usuário não é uma escuderia.')
 
-        vitorias = self.get_dataframe(f"select count(*) from results where constructorid = {user.id_original} and position = '1';")
+        vitorias = self.get_dataframe(f"select count(*) from results where constructorid = {user.id_original} and position::VARCHAR(10) = '1';")
         pilotos_amnt = self.get_dataframe(f"select count(distinct driverid) from results where constructorid = {user.id_original};")
         ano_inicio = self.get_dataframe(f"""
             select min(ra.year) from results re
@@ -133,7 +133,7 @@ class Formula1:
         if not user.type == 'Piloto':
             raise ValueError('Usuário não é um Piloto.')
 
-        vitorias = self.get_dataframe(f"select count(*) from results where driverid = {user.id_original} and position = '1';")
+        vitorias = self.get_dataframe(f"select count(*) from results where driverid = {user.id_original} and position::VARCHAR(10) = '1';")
         ano_inicio = self.get_dataframe(f"""
             select min(ra.year) from results re
             left join races ra
