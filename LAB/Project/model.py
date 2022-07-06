@@ -166,7 +166,6 @@ class Formula1:
             raise ValueError('Usuário não é um Piloto.')
 
         victory_report = self.get_dataframe(f"select * from GetVictoryReport_Driver({user.id_original});")
-        print(victory_report)
         victory_report.fillna('Todos', inplace=True)
         status_report = self.get_dataframe(f"select * from GetStatusReport_Driver({user.id_original});")
         return victory_report, status_report
