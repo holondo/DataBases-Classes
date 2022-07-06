@@ -93,11 +93,10 @@ class Formula1:
         self.cursor.execute(query ="")
         return 'OK'
 
-    
-    def get_tabelas_escuderia(self, user:User):
+    def get_overview_escuderia(self, user:User):
         if not user.type == 'Escuderia':
             raise ValueError('Usuário não é uma escuderia.')
-
+        
         vitorias = self.get_dataframe(f"select count(*) from results where constructorid = {user.id_original} and position::VARCHAR(10) = '1';")
         pilotos_amnt = self.get_dataframe(f"select count(distinct driverid) from results where constructorid = {user.id_original};")
         ano_inicio = self.get_dataframe(f"""
@@ -122,14 +121,18 @@ class Formula1:
         overview = overview.T
         overview.fillna('Nenhum', inplace=True)
 
+        return overview
+
+    def get_tabelas_escuderia(self, user:User):
+        if not user.type == 'Escuderia':
+            raise ValueError('Usuário não é uma escuderia.')
+
         drivers_report = self.get_dataframe(f"select * from GetDriversReport_Scuderia({user.id_original});")
         status_report = self.get_dataframe(f"select * from GetStatusReport_Scuderia({user.id_original});")
 
-        print(overview)
+        return drivers_report, status_report
 
-        return overview, drivers_report, status_report
-
-    def get_tabelas_piloto(self, user:User):
+    def get_overview_piloto(self, user:User):
         if not user.type == 'Piloto':
             raise ValueError('Usuário não é um Piloto.')
 
@@ -150,16 +153,23 @@ class Formula1:
         vitorias = vitorias.iloc[0, 0]
         ano_inicio = ano_inicio.iloc[0, 0]
         ano_fim = ano_fim.iloc[0, 0]
-        
+
         overview = pd.DataFrame(data=[vitorias, ano_inicio, ano_fim], index=['Vitórias', 'Ano de início', 'Ultima competição'])
         overview = overview.T
         overview['Vitórias'] = overview['Vitórias'].astype('int32')
         overview.fillna('Nenhum', inplace=True)
 
+        return overview;
+
+    def get_tabelas_piloto(self, user:User):
+        if not user.type == 'Piloto':
+            raise ValueError('Usuário não é um Piloto.')
+
         victory_report = self.get_dataframe(f"select * from GetVictoryReport_Driver({user.id_original});")
+        print(victory_report)
         victory_report.fillna('Todos', inplace=True)
         status_report = self.get_dataframe(f"select * from GetStatusReport_Driver({user.id_original});")
-        return overview, victory_report, status_report
+        return victory_report, status_report
 
     def get_tabelas_admin(self, user:User):
         if not user.type == 'Administrador':
@@ -182,7 +192,7 @@ class Formula1:
             raise ValueError('Usuário não é uma escuderia.')
 
         return self.get_dataframe(f"""
-            select fullname(dr.driverid) as Nome, dr.dateofbirth as nascimento, dr.nationality as nacionalidade
+            select fullname(dr.driverid) as Nome, dr.dob as nascimento, dr.nationality as nacionalidade
             from driver dr
             right join
                 (select distinct driverid from results where constructorid = {user.id_original}) as res
