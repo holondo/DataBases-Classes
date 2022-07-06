@@ -45,7 +45,7 @@ CREATE INDEX idx_3 ON RESULTS (constructorid) include (driverid);
 CREATE OR REPLACE FUNCTION GetStatusReport_Scuderia(CurrConstructorId INTEGER) RETURNS TABLE(Status VARCHAR(100), Quantidade INTEGER) AS $$
 	BEGIN
 		return query(
-			select s.status, count(s.status)::INTEGER as Quantidade from status s
+			select s.status::VARCHAR(100), count(s.status)::INTEGER as Quantidade from status s
 			left join results res
 				on s.statusid = res.statusid
 			where res.constructorid = CurrConstructorId
@@ -60,7 +60,7 @@ $$ LANGUAGE PLPGSQL;
 CREATE OR REPLACE FUNCTION GetVictoryReport_Driver(CurrDriverId INTEGER) RETURNS TABLE(Ano VARCHAR(100), Corrida VARCHAR(100), Vitorias INTEGER) AS $$
 	BEGIN
 		return query(
-			select ra.year, ra.name, count(re.position)::INTEGER 
+			select ra.year::VARCHAR(100), ra.name::VARCHAR(100), count(re.position)::INTEGER 
 			from results re
 			left join races ra
 				on re.raceid = ra.raceid
@@ -76,7 +76,7 @@ $$ LANGUAGE PLPGSQL;
 CREATE OR REPLACE FUNCTION GetStatusReport_Driver(CurrDriverId INTEGER) RETURNS TABLE(Status VARCHAR(100), Quantidade INTEGER) AS $$
 	BEGIN
 		return query(
-			select s.status, count(s.status)::INTEGER as Quantidade from status s
+			select s.status::VARCHAR(100), count(s.status)::INTEGER as Quantidade from status s
 			left join results res
 				on s.statusid = res.statusid
 			where res.driverid = CurrDriverId
