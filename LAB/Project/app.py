@@ -113,12 +113,12 @@ def consultarPiloto():
         user:User = User(**session['user'])
         # user.id_original = 3
         if request.method == 'GET':
-            return render_template('consultar-pilotos.html', user=session['user'],data=model.get_admin_data(), tabelas=model.get_tabelas_escuderia(user), tabelas_busca=None)
+            return render_template('consultar-pilotos.html', user=session['user'], tabela=model.get_overview_escuderia(user), tabelas_busca=None)
         
         elif request.method == 'POST':
             busca = request.form['txt-query']
             tabela_busca = model.get_pilotos_escuderia(busca, user)
-            return render_template('consultar-pilotos.html', user=user, data=model.get_admin_data(), tabelas=model.get_tabelas_escuderia(user), tabelas_busca=[tabela_busca])
+            return render_template('consultar-pilotos.html', user=user, tabela=model.get_overview_escuderia(user), tabelas_busca=[tabela_busca])
 
 
 if __name__ == '__main__':

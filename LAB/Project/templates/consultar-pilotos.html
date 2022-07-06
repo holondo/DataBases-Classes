@@ -34,17 +34,17 @@
         </form>
         {%if tabelas_busca%}
         <div class="modal-body">
-            {%for tabela in tabelas_busca%}
+            {%for busca in tabelas_busca%}
             <div>
                 <table class="table table-bordered">
                     <tr>
-                    {%for column in tabela.columns%}
+                    {%for column in busca.columns%}
                         <th>
                             {{column}}
                         </th>
                     {% endfor %}
                     </tr>
-                    {%for item in tabela.itertuples(index=False)%}
+                    {%for item in busca.itertuples(index=False)%}
                         <tr>
                             {%for dado in item%}
                                 <td>
